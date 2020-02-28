@@ -7,18 +7,20 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import CommentIcon from '@material-ui/icons/Comment';
+import ReplyAllIcon from '@material-ui/icons/ReplyAll';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography'
 
 const styles = theme => ({
   form: {
     width: '100%',
   },
   header: {
-    backgroundColor: 'lightGrey'
+    backgroundColor: '#f2f2f2',
+    padding: '10px',
   },
   title: {
     margin: '10px',
@@ -55,11 +57,11 @@ class CommentList extends React.Component {
       this.state.canUpdate[comment.id]) {
       if (this.state.wantsUpdate === comment.id) {
           const { classes } = this.props;
-          result = <form id="update" 
-            className={classes.form} 
+          result = <form id="update"
+            className={classes.form}
             noValidate autoComplete="off"
             onSubmit={this.handleSubmitUpdate}>
-            <ListItemText 
+            <ListItemText
             primary={comment.author} />
             <Grid container>
               <Grid item xs={10} className={classes.padright}>
@@ -77,11 +79,12 @@ class CommentList extends React.Component {
           </form>
       } else {
         result = <div>
-          <ListItemText 
-            primary={comment.author} 
+          <ListItemText
+            primary={comment.author}
             secondary={comment.body} />
           <Button
             variant="contained"
+            color="primary"
             id={"want-update-comment-"+comment.id}
             onClick={this.handleUpdateClick}>
             UPDATE
@@ -89,10 +92,10 @@ class CommentList extends React.Component {
         </div>
       }
     } else {
-      result = <ListItemText 
-        primary={comment.author} 
+      result = <ListItemText
+        primary={comment.author}
         secondary={comment.body} />
-    } 
+    }
 
     return result;
   }
@@ -101,7 +104,9 @@ class CommentList extends React.Component {
     const { classes } = this.props;
     return <div>
       <div className={classes.header}>
-        <h1 className={classes.title}>{this.props.user}</h1>
+        <Typography component="h1" variant="h1" className={classes.title}>
+          {this.props.user}
+        </Typography>
       </div>
       <List>
       {this.props.comments.map((comment, index) => (
@@ -115,14 +120,14 @@ class CommentList extends React.Component {
           <Divider variant="inset" component="li" />
         </div>
       ))}
-      <ListItem 
-        key={this.props.comments.length + 1} 
+      <ListItem
+        key={this.props.comments.length + 1}
         className={classes.padtop}>
         <ListItemAvatar>
-          <CommentIcon color="primary"/>
+          <ReplyAllIcon fontSize="large" color="disabled" />
         </ListItemAvatar>
         <form id="add"
-          className={classes.form} 
+          className={classes.form}
           noValidate autoComplete="off"
           onSubmit={this.handleSubmitAdd}>
           <Grid container>
@@ -135,7 +140,7 @@ class CommentList extends React.Component {
                 fullWidth/>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="contained" type="submit">SEND</Button>
+              <Button variant="contained" color="primary" type="submit">SEND</Button>
             </Grid>
           </Grid>
         </form>
@@ -156,7 +161,7 @@ class CommentList extends React.Component {
     this.props.onAddComment({
       date: (new Date()).toJSON(),
       id: id,
-      author: this.props.user, 
+      author: this.props.user,
       body: this.state.newComment
     });
     event.target.reset();
@@ -176,19 +181,19 @@ class CommentList extends React.Component {
       });
     }
   }
-  
+
   handleUpdateClick(event) {
     const id = parseInt(event.currentTarget.id.substring(
       event.currentTarget.id.lastIndexOf('-') + 1), 10);
     this.setState({wantsUpdate: id});
   }
-  
+
   resetWantsUpdateFlag() {
     this.setState({
       wantsUpdate: -1,
     });
   }
-  
+
   handleUpdateCommentChange(event) {
     const id = parseInt(event.currentTarget.id.substring(
       event.currentTarget.id.lastIndexOf('-') + 1), 10);
